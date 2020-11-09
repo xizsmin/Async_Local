@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         val queue = VolleyRequest.getInstance(this).requestQueue
 
-        button_request.setOnClickListener {
+        button_request_volley.setOnClickListener {
             Toast.makeText(it.context, edittext_address.text, Toast.LENGTH_SHORT).show()
             val address = edittext_address.text.toString()
             val url = set_url_with_addr(address)

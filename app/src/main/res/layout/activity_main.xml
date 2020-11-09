@@ -10,15 +10,15 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/button_request"/>
+        android:layout_above="@+id/button_request_volley"/>
 
     <Button
-        android:id="@+id/button_request"
+        android:id="@+id/button_request_volley"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Search!"
+        android:text="Search (Volley)"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@color/colorAccent"
-        android:layout_below="@+id/button_request">
+        android:layout_below="@+id/button_request_volley">
 
         <ScrollView
             android:background="@color/colorPrimaryDark"
