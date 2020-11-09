@@ -5,13 +5,24 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.android.volley.Response
+import com.android.volley.toolbox.HttpResponse
 import com.android.volley.toolbox.StringRequest
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.lang.StringBuilder
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        button_clear.setOnClickListener {
+            edittext_address.text.clear()
+            textview_result.text = ""
+        }
 
         val queue = VolleyRequest.getInstance(this).requestQueue
 
@@ -34,11 +45,38 @@ class MainActivity : AppCompatActivity() {
                         header["Authorization"] = "KakaoAK " + REST_API_KEY
                         return header
                     }
+                }
+            )
+        }
+        button_request_thread.setOnClickListener {
+            Thread(Runnable {
+                val address = edittext_address.text.toString()
 
+                val url = URL(set_url_with_addr(address))
+                val conn = url.openConnection() as HttpURLConnection
+
+                conn.requestMethod = "GET"
+                conn.setRequestProperty("Authorization", "KakaoAK " + REST_API_KEY)
+
+                try {
+                    if (conn.responseCode == HttpURLConnection.HTTP_OK) {
+                        val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
+                        val stringBuilder = StringBuilder()
+                        bufferedReader.forEachLine {
+                            stringBuilder.append(it)
+                        }
+                        val readstream = stringBuilder.toString()
+                        runOnUiThread {
+                            textview_result.text = readstream
+                        }
+
+                        Log.d("HttpURLConn", readstream)
+                    }
+                } finally {
+                    conn.disconnect()
                 }
 
-            )
-
+            }).start()
         }
     }
 }
