@@ -10,27 +10,43 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/button_request_volley"/>
+        android:layout_marginTop="80dp"/>
+
+    <Button
+        android:id="@+id/button_request_thread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext_address"
+        android:layout_centerHorizontal="true"
+        android:text="Search (Thread)"/>
+
 
     <Button
         android:id="@+id/button_request_volley"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Search (Volley)"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_below="@+id/button_request_thread"
+        android:text="Search (Volley)"/>
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Clear"
+        android:layout_below="@+id/button_request_volley"/>
 
     <RelativeLayout
+        android:id="@+id/layout_result"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
         android:background="@color/colorAccent"
-        android:layout_below="@+id/button_request_volley">
+        android:layout_below="@+id/button_clear">
 
         <ScrollView
+            android:id="@+id/layout_scrollview"
             android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -45,6 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </ScrollView>
+
     </RelativeLayout>
+
 
 </RelativeLayout>
