@@ -2,6 +2,8 @@ package com.example.async_local
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.android.volley.Response
@@ -48,6 +50,14 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         }
+
+        /**
+         * Handler() without parameter's been deprecated:
+         * You're supposed to explicitly indicate which looper to use.
+         * Otherwise, it might cause the handler to terminate as it couldn't expect a new job,
+         * or any other problems such as race conditions, etc.
+         */
+        val mHandler = Handler(Looper.getMainLooper())
         button_request_thread.setOnClickListener {
             Thread(Runnable {
                 val address = edittext_address.text.toString()
@@ -66,9 +76,10 @@ class MainActivity : AppCompatActivity() {
                             stringBuilder.append(it)
                         }
                         val readstream = stringBuilder.toString()
-                        runOnUiThread {
-                            textview_result.text = readstream
-                        }
+                        //runOnUiThread {
+                        //    textview_result.text = readstream
+                        //}
+                        mHandler.post( Runnable { textview_result.text = readstream } )
 
                         Log.d("HttpURLConn", readstream)
                     }
