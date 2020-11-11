@@ -30,12 +30,21 @@
         android:text="Search (Volley)"/>
 
     <Button
+        android:id="@+id/button_request_retrofit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/button_request_volley"
+        android:text="Search (Retrofit)"/>
+
+
+    <Button
         android:id="@+id/button_clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Clear"
-        android:layout_below="@+id/button_request_volley"/>
+        android:layout_below="@+id/button_request_retrofit"/>
 
     <RelativeLayout
         android:id="@+id/layout_result"

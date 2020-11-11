@@ -7,7 +7,6 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.android.volley.Response
-import com.android.volley.toolbox.HttpResponse
 import com.android.volley.toolbox.StringRequest
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
@@ -44,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                     }) {
                     override fun getHeaders(): MutableMap<String, String> {
                         val header: MutableMap<String, String> = HashMap()
-                        header["Authorization"] = "KakaoAK " + REST_API_KEY
+                        header["Authorization"] = "KakaoAK " + Constants.REST_API_KEY
                         return header
                     }
                 }
@@ -66,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 val conn = url.openConnection() as HttpURLConnection
 
                 conn.requestMethod = "GET"
-                conn.setRequestProperty("Authorization", "KakaoAK " + REST_API_KEY)
+                conn.setRequestProperty("Authorization", "KakaoAK " + Constants.REST_API_KEY)
 
                 try {
                     if (conn.responseCode == HttpURLConnection.HTTP_OK) {
@@ -89,5 +88,23 @@ class MainActivity : AppCompatActivity() {
 
             }).start()
         }
+
+        button_request_retrofit.setOnClickListener {
+            Thread(Runnable {
+                val address = edittext_address.text.toString()
+                val call = RetrofitRequest().getLocalServiceRetrofit(address)
+                val response = call.execute()
+
+                if (response.isSuccessful) {
+                    Log.d("Async", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                //    runOnUiThread {
+                //        textview_result.text = response.body().toString()
+                //    }
+                    mHandler.post(Runnable { textview_result.text = response.body().toString() })
+                }
+
+            }).start()
+        }
     }
 }
+
