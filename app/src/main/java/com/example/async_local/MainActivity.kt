@@ -9,16 +9,22 @@ import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.lang.Runnable
 import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var job: Job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        job = Job()         // For coroutines
 
         button_clear.setOnClickListener {
             edittext_address.text.clear()
@@ -35,10 +41,10 @@ class MainActivity : AppCompatActivity() {
             VolleyRequest.getInstance(it.context).addToRequestQueue(
 
                 object : StringRequest(Method.GET, set_url_with_addr(address),
-                Response.Listener<String> {
-                    textview_result.text = it
-                    Log.d("Async_Local", it.toString())
-                }, Response.ErrorListener {
+                    Response.Listener<String> {
+                        textview_result.text = it
+                        Log.d("Async_Local", it.toString())
+                    }, Response.ErrorListener {
                         Log.e("Async_Local", it.toString())
                     }) {
                     override fun getHeaders(): MutableMap<String, String> {
@@ -78,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                         //runOnUiThread {
                         //    textview_result.text = readstream
                         //}
-                        mHandler.post( Runnable { textview_result.text = readstream } )
+                        mHandler.post(Runnable { textview_result.text = readstream })
 
                         Log.d("HttpURLConn", readstream)
                     }
@@ -97,14 +103,43 @@ class MainActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     Log.d("Async", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                //    runOnUiThread {
-                //        textview_result.text = response.body().toString()
-                //    }
+                    //    runOnUiThread {
+                    //        textview_result.text = response.body().toString()
+                    //    }
                     mHandler.post(Runnable { textview_result.text = response.body().toString() })
                 }
 
             }).start()
         }
+
+        button_request_coroutine.setOnClickListener {
+            val address = edittext_address.text.toString()
+            val url = URL(set_url_with_addr(address))
+            requestByCoroutine(url)
+        }
+
+    }
+
+    private fun requestByCoroutine(url: URL) = GlobalScope.launch(Dispatchers.Main + job) {
+        suspend fun request(): String = withContext(Dispatchers.IO) {
+            val conn = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "GET"
+            conn.setRequestProperty("Authorization", "KakaoAK " + Constants.REST_API_KEY)
+
+            if (conn.responseCode == HttpURLConnection.HTTP_OK) {
+                val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
+                val stringBuilder = StringBuilder()
+                bufferedReader.forEachLine {
+                    stringBuilder.append(it)
+                }
+                stringBuilder.toString()
+            } else {
+                "Failed to load data"
+            }
+        }
+
+        val result = request()
+        textview_result.text = result
     }
 }
 
