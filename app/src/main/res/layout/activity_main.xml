@@ -49,13 +49,13 @@
             android:id="@+id/button_request_coroutine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Coroutine"/>
+            android:text="CR-Http"/>
 
         <Button
-            android:id="@+id/button_test1"
+            android:id="@+id/button_request_coroutine_retrofit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TBD"/>
+            android:text="CR-RETRO"/>
 
         <Button
             android:id="@+id/button_test2"

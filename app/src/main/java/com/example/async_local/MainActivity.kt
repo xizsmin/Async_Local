@@ -115,12 +115,16 @@ class MainActivity : AppCompatActivity() {
         button_request_coroutine.setOnClickListener {
             val address = edittext_address.text.toString()
             val url = URL(set_url_with_addr(address))
-            requestByCoroutine(url)
+            requestByCoroutineHttp(url)
+        }
+
+        button_request_coroutine_retrofit.setOnClickListener {
+            requestByCoroutineRetrofit()
         }
 
     }
 
-    private fun requestByCoroutine(url: URL) = GlobalScope.launch(Dispatchers.Main + job) {
+    private fun requestByCoroutineHttp(url: URL) = GlobalScope.launch(Dispatchers.Main + job) {
         suspend fun request(): String = withContext(Dispatchers.IO) {
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "GET"
@@ -140,6 +144,19 @@ class MainActivity : AppCompatActivity() {
 
         val result = request()
         textview_result.text = result
+    }
+
+    private fun requestByCoroutineRetrofit() = GlobalScope.launch (Dispatchers.Main + job) {
+        suspend fun request(): String = withContext(Dispatchers.IO) {
+            val address: String = edittext_address.text.toString()
+            val response =
+                RetrofitRequest().getLocalServiceRetrofit(address).execute()
+
+            if (response.isSuccessful) {
+                response.body().toString()
+            } else "Failed to retrieve data."
+        }
+        textview_result.text = request()
     }
 }
 
