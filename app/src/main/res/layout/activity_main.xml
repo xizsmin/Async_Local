@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_width = "match_parent"
     tools:context=".MainActivity">
+
+<RelativeLayout
+    android:background="@android:color/holo_blue_bright"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <EditText
         android:id="@+id/edittext_address"
         android:layout_width="250dp"
@@ -58,10 +65,16 @@
             android:text="CR-RETRO"/>
 
         <Button
-            android:id="@+id/button_test2"
+            android:id="@+id/button_request_java_http"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TBD"/>
+            android:text="J-HTTP"/>
+
+        <Button
+            android:id="@+id/button_request_java_retrofit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="J-RETRO"/>
     </LinearLayout>
 
     <Button
@@ -96,8 +109,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </ScrollView>
-
     </RelativeLayout>
 
-
 </RelativeLayout>
+</ScrollView>
+

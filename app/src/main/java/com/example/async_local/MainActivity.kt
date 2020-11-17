@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         job = Job()         // For coroutines
 
         button_clear.setOnClickListener {
@@ -122,6 +123,17 @@ class MainActivity : AppCompatActivity() {
             requestByCoroutineRetrofit()
         }
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("search_result", textview_result.text.toString())
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val result = savedInstanceState.getString("search_result")
+        textview_result.text = result
     }
 
     private fun requestByCoroutineHttp(url: URL) = GlobalScope.launch(Dispatchers.Main + job) {
