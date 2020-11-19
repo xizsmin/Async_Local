@@ -107,7 +107,19 @@ class MainActivity : AppCompatActivity() {
                     //    runOnUiThread {
                     //        textview_result.text = response.body().toString()
                     //    }
-                    mHandler.post(Runnable { textview_result.text = response.body().toString() })
+
+                    mHandler.post(Runnable {
+                        if (response.body()?.documents?.size == 0) {
+                            textview_result.text = "Failed to get response"
+                            return@Runnable
+                        }
+
+                        val res = response.body()?.documents?.get(0)
+                        if (res != null) {
+                            textview_result.text = if (res.road_address != null) res.road_address.address_name else res.address_name
+                        } else textview_result.text = "Failed to retrieve address info with Retrofit"
+                    }
+                    )
                 }
 
             }).start()
@@ -121,6 +133,14 @@ class MainActivity : AppCompatActivity() {
 
         button_request_coroutine_retrofit.setOnClickListener {
             requestByCoroutineRetrofit()
+        }
+
+        button_request_java_http.setOnClickListener {
+            Thread(Runnable {
+                val result = RequestJava(edittext_address.text.toString()).requestHttpJava()
+                mHandler.post(Runnable { textview_result.text = result })
+
+            }).start()
         }
 
     }

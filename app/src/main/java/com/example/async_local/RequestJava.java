@@ -15,8 +15,7 @@ public class RequestJava {
         this.mAddress = address;
     }
 
-    public String requestResultJava(String address) {
-
+    public String requestHttpJava() {
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -48,4 +47,5 @@ public class RequestJava {
         }
         return "";
     }
+
 }
