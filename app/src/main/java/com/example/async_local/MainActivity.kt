@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import com.android.volley.Response
@@ -128,7 +129,8 @@ class MainActivity : AppCompatActivity() {
         button_request_coroutine.setOnClickListener {
             val address = edittext_address.text.toString()
             val url = URL(set_url_with_addr(address))
-            requestByCoroutineHttp(url)
+            //requestByCoroutineHttp(url)
+            requestByCoroutineHttp2(url)
         }
 
         button_request_coroutine_retrofit.setOnClickListener {
@@ -177,6 +179,32 @@ class MainActivity : AppCompatActivity() {
         val result = request()
         textview_result.text = result
     }
+
+    private fun requestByCoroutineHttp2(url: URL) {
+        GlobalScope.launch (Dispatchers.Main) {
+            textview_result.text = request(url)
+        }
+    }
+
+    suspend fun request(url: URL): String  {
+        return GlobalScope.async(Dispatchers.IO) {
+            val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "GET"
+            conn.setRequestProperty("Authorization", "KakaoAK " + Constants.REST_API_KEY)
+            if (conn.responseCode == HttpURLConnection.HTTP_OK) {
+                val bufferedReader: BufferedReader =
+                    BufferedReader(InputStreamReader(conn.inputStream))
+                val stringBuilder: StringBuilder = StringBuilder()
+                bufferedReader.forEachLine {
+                    stringBuilder.append(it)
+                }
+                stringBuilder.toString()
+            } else {
+                "Failed to load data ***"
+            }
+        }.await()
+    }
+
 
     private fun requestByCoroutineRetrofit() = GlobalScope.launch (Dispatchers.Main + job) {
         suspend fun request(): String = withContext(Dispatchers.IO) {
