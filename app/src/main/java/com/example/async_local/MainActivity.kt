@@ -184,6 +184,10 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch (Dispatchers.Main) {
             textview_result.text = request(url)
         }
+        // Can't call request() directly as below:
+        // suspend function "request" should be called only from a coroutine or another suspend function.
+        // textview_result.text = request(url)
+
     }
 
     suspend fun request(url: URL): String  {
